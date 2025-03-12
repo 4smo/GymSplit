@@ -1,19 +1,58 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>GymSplit</title>
-</head>
+{% block title %}Keskustelu{% endblock %}
 
-<body>
-  <h1>GymSplit</h1>
+{% block content %}
+
+{% for post in posts %}
+<div class="post">
   <p>
-    <b>Welcome</b>
+    <a href="/post/{{ post.id }}">{{ post.title }}</a>
   </p>
-  <button onclick="location.href='/login'">Login</button>
-  <button onclick="location.href='/register'">Register</button>
-</body>
+  <p>
+  <img src="/image/{{ user.id }}" alt="Image of the split">
+  </p>
+</div>
+{% endfor %}
+<div id="post-container"></div>
+<div id="loading" style="display: none;">Loading...</div>
 
+<script>
+    let offset = 0;
+    const limit = 10;
+    const postContainer = document.getElementById('post-container');
+    const loading = document.getElementById('loading');
 
+    function loadPosts() {
+        loading.style.display = 'block';
+        fetch(`/posts?offset=${offset}&limit=${limit}`)
+            .then(response => response.json())
+            .then(data => {
+                loading.style.display = 'none';
+                data.forEach(post => {
+                    const postDiv = document.createElement('div');
+                    postDiv.className = 'post';
+                    postDiv.innerHTML = `
+                        <p><a href="/post/${post.id}">${post.title}</a></p>
+                        <p>${post.has_image ? `<p><img src="/image/${post.id}" alt="Julkaisun ${post.id} kuva"></p>` : ""}<p>
+                    `;
+                    postContainer.appendChild(postDiv);
+                });
+                offset += limit;
+            })
+            .catch(error => {
+                console.error('Error loading posts:', error);
+                loading.style.display = 'none';
+            });
+    }
 
-</html>
+    function handleScroll() {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+            loadPosts();
+        }
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    document.addEventListener('DOMContentLoaded', loadPosts);
+</script>
+{% endblock %}
