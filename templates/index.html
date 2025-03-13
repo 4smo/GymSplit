@@ -34,7 +34,7 @@
                     postDiv.className = 'post';
                     postDiv.innerHTML = `
                         <p><a href="/post/${post.id}">${post.title}</a></p>
-                        <p>${post.has_image ? `<p><img src="/image/${post.id}" alt="Julkaisun ${post.id} kuva"></p>` : ""}<p>
+                        <p>${post.has_image ? `<p><img src="/image/${post.id}" alt="Julkaisun ${post.id} kuva" class="post-image"></p>` : ""}<p>
                     `;
                     postContainer.appendChild(postDiv);
                 });

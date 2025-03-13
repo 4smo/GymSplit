@@ -68,3 +68,9 @@ body {
     background-color: blue;
     color: white;
   }
+
+  .post-image {
+    width: 200px; /* Set the desired width */
+    height: 200px; /* Set the desired height */
+    object-fit: cover; /* Ensures the image covers the area without distorting */
+}
