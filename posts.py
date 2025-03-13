@@ -1,8 +1,10 @@
 import db
 
-def add_post(title, tag, content, image_data, user_id):
-    sql = "INSERT INTO posts (title, tag, content, image_data, user_id) VALUES (?, ?, ?, ?, ?)"
-    db.execute(sql, [title, tag, content, image_data, user_id])
+def add_post(title, content_days, user_id):
+    sql = "INSERT INTO posts (title, content_day1, content_day2, content_day3, content_day4, content_day5, content_day6, content_day7, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    params = [title] + content_days + [user_id]
+    print(params)
+    db.execute(sql, params)
 
     post_id = db.last_insert_id()
     print(post_id)

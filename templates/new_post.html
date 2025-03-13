@@ -12,21 +12,13 @@
     <label for="title">Title</label>:<br />
     <input type="text" id="title" name="title" maxlength="100" required />
   </p>
-  <p>
-    <label for="tag">Name</label>:<br />
-    <input type="text" id="tag" name="tag" maxlength="10" required />
-  </p>
-  <p>
-    <label for="content">Content</label>:<br />
-    <textarea id="content" name="content" rows="5" cols="40" maxlength="5000"></textarea>
-  </p>
-  <p>
-    Lähetä jpg-tiedosto, jonka koko on enintään 100 kt
-  </p>
-  <p>
-    <label for="image">Kuva:</label>
-    <input type="file" id="image" name="image" accept=".jpg" />
-  </p>
+  <div id="content-boxes">
+    <p>
+      <label for="content_day1">Day 1</label>:<br />
+      <textarea id="content_day1" name="content_day1" rows="5" cols="40" maxlength="50"></textarea>
+    </p>
+  </div>
+  <button type="button" id="add-content-box">+</button>
   
   {% for message in get_flashed_messages() %}
   <p class="info">
@@ -38,7 +30,19 @@
   <input type="submit" value="Lähetä" />
 </form>
 
-
+<script>
+  document.getElementById('add-content-box').addEventListener('click', function() {
+    var contentBoxes = document.getElementById('content-boxes');
+    var numBoxes = contentBoxes.getElementsByTagName('textarea').length;
+    
+    if (numBoxes < 7) {
+      var newBox = document.createElement('p');
+      newBox.innerHTML = '<label for="content_day' + (numBoxes + 1) + '">Day ' + (numBoxes + 1) + '</label>:<br />' +
+                         '<textarea id="content_day' + (numBoxes + 1) + '" name="content_day' + (numBoxes + 1) + '" rows="5" cols="40" maxlength="5000"></textarea>';
+      contentBoxes.appendChild(newBox);
+    }
+  });
+</script>
 {% endif %}
 
 

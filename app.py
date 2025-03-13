@@ -83,29 +83,15 @@ def new_post():
         check_csrf()
         require_login()
         title = request.form["title"]
-        content = request.form["content"]
-        image = request.files["image"]
-        tag = request.form["tag"]
+        content_days = [request.form.get(f'content_day{i}', '') for i in range(1, 8)]
 
-        if not title or len(title) > 100 or len(content) > 5000 or len(tag) > 10:
+        if not title or len(title) > 100:
             abort(403)
-
-        if image:
-            if not image.filename.endswith(".jpg"):
-                flash("VIRHE: Lähettämäsi tiedosto ei ole jpg-tiedosto")
-                return redirect("/new_post")
-
-            image_data = image.read()
-            if len(image_data) > 100 * 1024:
-                flash("VIRHE: Lähettämäsi tiedosto on liian suuri")
-                return redirect("/new_post")
-        else:
-            image_data = None
+        
 
         user_id = session["user_id"]
-        post_id = posts.add_post(title, tag, content, image_data, user_id)
-
-        flash("Postauksen lisääminen onnistui")
+        post_id = posts.add_post(title, content_days, user_id)
+   
         return redirect("/")
     
 @app.route("/posts")
