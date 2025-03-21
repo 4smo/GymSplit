@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}Keskustelu{% endblock %}
+
+{% block content %}
+
+{% if session.user_id %}
+<h3>Edit post</h3>
+
+<form action="/post/{{ post_id }}/edit" method="post" enctype="multipart/form-data">
+    <p>
+      <label for="title">Title</label>:<br />
+      <input type="text" id="title" name="title"  value="{{ filled.title }}" maxlength="100" required />
+    </p>
+    <div id="content-boxes">
+      {% for i in range(1, 8) %}
+      <p>
+        <label for="content_day{{ i }}">Day {{ i }}</label>:<br />
+        <textarea id="content_day{{ i }}" name="content_day{{ i }}" rows="5" cols="40" maxlength="50">{{ filled['content_day' + i|string] }}</textarea>
+      </p>
+      {% endfor %}
+    </div>
+    <button type="button" id="add-content-box">+</button>
+    
+    {% for message in get_flashed_messages() %}
+    <p class="info">
+      {{ message }}
+    </p>
+    {% endfor %}
+    
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+    <input type="submit" value="Lähetä" />
+  </form>
+  
+  <script>
+    document.getElementById('add-content-box').addEventListener('click', function() {
+      var contentBoxes = document.getElementById('content-boxes');
+      var numBoxes = contentBoxes.getElementsByTagName('textarea').length;
+      
+      if (numBoxes < 7) {
+        var newBox = document.createElement('p');
+        newBox.innerHTML = '<label for="content_day' + (numBoxes + 1) + '">Day ' + (numBoxes + 1) + '</label>:<br />' +
+                           '<textarea id="content_day' + (numBoxes + 1) + '" name="content_day' + (numBoxes + 1) + '" rows="5" cols="40" maxlength="5000"></textarea>';
+        contentBoxes.appendChild(newBox);
+      }
+    });
+  </script>
+{% endif %}
+
+
+{% endblock %}

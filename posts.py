@@ -3,11 +3,9 @@ import db
 def add_post(title, content_days, user_id):
     sql = "INSERT INTO posts (title, content_day1, content_day2, content_day3, content_day4, content_day5, content_day6, content_day7, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
     params = [title] + content_days + [user_id]
-    print(params)
     db.execute(sql, params)
 
     post_id = db.last_insert_id()
-    print(post_id)
     return post_id
 
 def upvote(user_id, post_id, vote):
@@ -39,3 +37,10 @@ def remove_post(post_id):
     sql = "DELETE FROM posts WHERE id = ?"
     db.execute(sql, [post_id])
 
+def update_post(title, content_days, user_id, post_id):
+    sql = "UPDATE posts SET title = ?, content_day1 = ?, content_day2 = ?, content_day3 = ?, content_day4 = ?, content_day5 = ?, content_day6 = ?, content_day7 = ?, user_id = ? WHERE id = ?"
+    params = [title] + content_days + [user_id, post_id]
+    db.execute(sql, params)
+    
+    post_id = db.last_insert_id()
+    return post_id

@@ -128,11 +128,42 @@ def delete_post(post_id):
     posts.remove_post(post["id"])
     return redirect("/")
 
-@app.route("/user_id")
-def get_user_id():
-    if "user_id" not in session:
-        return jsonify({"user_id": None})
-    return jsonify({"user_id": session["user_id"]})
+@app.route("/post/<int:post_id>/edit", methods=["GET", "POST"])
+def edit_post(post_id):
+
+    if request.method == "GET":
+        require_login()
+        post = posts.fetch_post(post_id)
+        if not post or post["user_id"] != session["user_id"]:
+            abort(403)
+        filled = {
+            "title": post["title"],
+            "content_day1": post["content_day1"],
+            "content_day2": post["content_day2"],
+            "content_day3": post["content_day3"],
+            "content_day4": post["content_day4"],
+            "content_day5": post["content_day5"],
+            "content_day6": post["content_day6"],
+            "content_day7": post["content_day7"]
+        }
+        return render_template("edit.html", filled=filled, post_id=post_id)
+    
+    if request.method == "POST":
+        require_login()
+        check_csrf()
+
+        post = posts.fetch_post(post_id)
+        if not post or post["user_id"] != session["user_id"]:
+            abort(403)
+
+        title = request.form["title"]
+        content_days = [request.form.get(f'content_day{i}', '') for i in range(1, 8)]
+        if not title or len(title) > 100:
+            abort(403)
+        user_id = session["user_id"]
+        posts.update_post(title, content_days, user_id, post_id)
+        return redirect(f"/post/{post_id}")
+
 
 @app.route("/post/<int:post_id>")
 def show_post(post_id):
