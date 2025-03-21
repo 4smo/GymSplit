@@ -1,11 +1,56 @@
 {% extends "layout.html" %}
 
-{% block title %}{{ thread.title }}{% endblock %}
-
 {% block content %}
 
-<h2>{{ thread.title }}</h2>
+{% for message in get_flashed_messages() %}
+<p>
+  <b>{{ message }}</b>
+</p>
+{% endfor %}
 
-
+<head>
+    <title>{{ post.title }}</title>
+</head>
+  
+<body>
+    <h1>{{ post.title }}</h1>
+    <div style="display: flex; flex-wrap: wrap;">
+        <div style="margin-right: 20px;">
+            <h3>Day 1:</h3>
+            <p>{{ post.content_day1 }}</p>
+        </div>
+        <div style="margin-right: 20px;">
+            <h3>Day 2:</h3>
+            <p>{{ post.content_day2 }}</p>
+        </div>
+        <div style="margin-right: 20px;">
+            <h3>Day 3:</h3>
+            <p>{{ post.content_day3 }}</p>
+        </div>
+        <div style="margin-right: 20px;">
+            <h3>Day 4:</h3>
+            <p>{{ post.content_day4 }}</p>
+        </div>
+        <div style="margin-right: 20px;">
+            <h3>Day 5:</h3>
+            <p>{{ post.content_day5 }}</p>
+        </div>
+        <div style="margin-right: 20px;">
+            <h3>Day 6:</h3>
+            <p>{{ post.content_day6 }}</p>
+        </div>
+        <div style="margin-right: 20px;">
+            <h3>Day 7:</h3>
+            <p>{{ post.content_day7 }}</p>
+        </div>
+    </div> 
+    {% if post.user_id == session.user_id %}
+    <form method="POST" action="/post/{{ post.id }}/delete" onsubmit="return confirm('Are you sure you want to delete this post?');">
+        <input type="hidden" name="post_id" value="{{ post_id }}" />
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+        <button type="submit" class="delete-button">Delete</button>
+    </form>
+    {% endif %}
+</body>
 
 {% endblock %}

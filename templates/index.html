@@ -1,58 +1,57 @@
 {% extends "layout.html" %}
 
-{% block title %}Keskustelu{% endblock %}
-
 {% block content %}
+
+{% for message in get_flashed_messages() %}
+<p>
+  <b>{{ message }}</b>
+</p>
+{% endfor %}
 
 {% for post in posts %}
 <div class="post">
   <p>
     <a href="/post/{{ post.id }}">{{ post.title }}</a>
   </p>
-  <p>
-  <img src="/image/{{ user.id }}" alt="Image of the split">
-  </p>
 </div>
 {% endfor %}
+
 <div id="post-container"></div>
 <div id="loading" style="display: none;">Loading...</div>
-
 <script>
-    let offset = 0;
-    const limit = 10;
-    const postContainer = document.getElementById('post-container');
-    const loading = document.getElementById('loading');
-
-    function loadPosts() {
-        loading.style.display = 'block';
-        fetch(`/posts?offset=${offset}&limit=${limit}`)
-            .then(response => response.json())
-            .then(data => {
-                loading.style.display = 'none';
-                data.forEach(post => {
-                    const postDiv = document.createElement('div');
-                    postDiv.className = 'post';
-                    postDiv.innerHTML = `
-                        <p><a href="/post/${post.id}">${post.title}</a></p>
-                        <p>${post.has_image ? `<p><img src="/image/${post.id}" alt="Julkaisun ${post.id} kuva" class="post-image"></p>` : ""}<p>
-                    `;
-                    postContainer.appendChild(postDiv);
-                });
-                offset += limit;
-            })
-            .catch(error => {
-                console.error('Error loading posts:', error);
-                loading.style.display = 'none';
-            });
+  let offset = 0;
+  const limit = 10;
+  const postContainer = document.getElementById('post-container');
+  const loading = document.getElementById('loading');
+  function loadPosts() {
+    loading.style.display = 'block';
+    fetch(`/posts?offset=${offset}&limit=${limit}`)
+      .then(response => response.json())
+      .then(data => {
+        loading.style.display = 'none';
+        data.forEach(post => {
+          const postDiv = document.createElement('div');
+          postDiv.className = 'post';
+          const filteredContent = post.content_days.filter(content => content.trim() !== '');
+          postDiv.innerHTML = `
+            <p><a href="/post/${post.id}">${post.title}</a></p>
+            <div> ${filteredContent.join(' | ')} </div>
+          `;
+          postContainer.appendChild(postDiv);
+        });
+        offset += limit;
+      })
+      .catch(error => {
+        console.error('Error loading posts:', error);
+        loading.style.display = 'none';
+      });
+  }
+  function handleScroll() {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+      loadPosts();
     }
-
-    function handleScroll() {
-        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
-            loadPosts();
-        }
-    }
-
-    window.addEventListener('scroll', handleScroll);
-    document.addEventListener('DOMContentLoaded', loadPosts);
+  }
+  window.addEventListener('scroll', handleScroll);
+  document.addEventListener('DOMContentLoaded', loadPosts);
 </script>
 {% endblock %}

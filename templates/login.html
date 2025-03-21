@@ -1,9 +1,18 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
+
+{% block title %}Keskustelu{% endblock %}
+
+{% block content %}
 
 <head>
   <title>Login</title>
 </head>
+
+{% for message in get_flashed_messages() %}
+<p>
+  <b>{{ message }}</b>
+</p>
+{% endfor %}
 
 <body>
   <form action="/login" method="post">
@@ -19,4 +28,4 @@
   </form>
 </body>
 
-</html>
+{% endblock %}

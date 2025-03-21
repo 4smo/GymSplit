@@ -25,28 +25,34 @@ def check_csrf():
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", csrf_token=session.get("csrf_token"))
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template("register.html")
+    if request.method == "GET":
+        return render_template("register.html", filled={})
 
-@app.route("/create", methods=["POST"])
-def create():
-    username = request.form["username"]
-    password1 = request.form["password1"]
-    password2 = request.form["password2"]
-    if password1 != password2:
-        return "ERROR: passwords do not match"
-    password_hash = generate_password_hash(password1)
+    if request.method == "POST":
+        username = request.form["username"]
+        if not username or len(username) > 16:
+            abort(403)
+        password1 = request.form["password1"]
+        password2 = request.form["password2"]
 
-    try:
-        sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
-        db.execute(sql, [username, password_hash])
-    except sqlite3.IntegrityError:
-        return "ERROR: username taken"
+        if password1 != password2:
+            flash("Passwords do not match")
+            filled = {"username": username}
+            return render_template("register.html", filled=filled)
 
-    return "Registeration successful"
+        try:
+            users.create_user(username, password1)
+            flash("Registering successful. You can now log in")
+            return redirect("/")
+        except sqlite3.IntegrityError:
+            flash("Username taken")
+            filled = {"username": username}
+            return render_template("register.html", filled=filled)
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -63,7 +69,8 @@ def login():
             session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         else:
-            return "ERROR: wrong username or password"
+            flash("Wrong username or password")
+            return render_template("login.html")
         
 @app.route("/logout")
 def logout():
@@ -94,16 +101,11 @@ def new_post():
    
         return redirect("/")
     
-@app.route("/posts")
+@app.route('/posts')
 def get_posts():
     offset = int(request.args.get('offset', 0))
     limit = int(request.args.get('limit', 10))
-    post_list = posts.get_posts(offset, limit)
-    posts_data = [dict(post) for post in post_list]
-
-    if not posts_data:
-        return jsonify({"message": "No posts available"}), 204
-    
+    posts_data = posts.fetch_posts(offset, limit)
     return jsonify(posts_data)
 
 @app.route("/image/<int:post_id>")
@@ -114,3 +116,27 @@ def show_image(post_id):
     response = make_response(bytes(image))
     response.headers.set("Content-Type", "image/jpeg")
     return response
+
+
+@app.route("/post/<int:post_id>/delete", methods=["POST"])
+def delete_post(post_id):
+    require_login()
+    check_csrf()
+    post = posts.fetch_post(post_id)
+    if not post or post["user_id"] != session["user_id"]:
+        abort(403)
+    posts.remove_post(post["id"])
+    return redirect("/")
+
+@app.route("/user_id")
+def get_user_id():
+    if "user_id" not in session:
+        return jsonify({"user_id": None})
+    return jsonify({"user_id": session["user_id"]})
+
+@app.route("/post/<int:post_id>")
+def show_post(post_id):
+    post = posts.fetch_post(post_id)
+    if not post:
+        abort(404)
+    return render_template("post.html", post=post)
