@@ -13,12 +13,12 @@ def upvote(user_id, post_id, vote):
     db.execute(sql, [user_id, post_id, vote])
 
 def fetch_post(post_id):
-    sql = "SELECT id, title, content_day1, content_day2, content_day3, content_day4, content_day5, content_day6, content_day7, tag, user_id FROM posts WHERE id = ?"
+    sql = "SELECT id, title, tag, content_day1, content_day2, content_day3, content_day4, content_day5, content_day6, content_day7, user_id FROM posts WHERE id = ?"
     result = db.query(sql, [post_id])
     return result[0] if result else None
 
 def fetch_posts(offset=0, limit=10):
-    sql = "SELECT id, title, content_day1, content_day2, content_day3, content_day4, content_day5, content_day6, content_day7, tag, user_id FROM posts LIMIT ? OFFSET ?"
+    sql = "SELECT id, title, tag, content_day1, content_day2, content_day3, content_day4, content_day5, content_day6, content_day7, user_id FROM posts LIMIT ? OFFSET ?"
     result = db.query(sql, [limit, offset])
 
     posts_list = [

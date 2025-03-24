@@ -35,6 +35,7 @@
           const filteredContent = post.content_days.filter(content => content.trim() !== '');
           postDiv.innerHTML = `
             <p><a href="/post/${post.id}">${post.title}</a></p>
+            <p>${post.tag}</p>
             <div> ${filteredContent.join(' | ')} </div>
           `;
           postContainer.appendChild(postDiv);
