@@ -1,6 +1,4 @@
-import sqlite3
-from flask import Flask, redirect, render_template, request, session, abort, flash, make_response, render_template, jsonify
-from werkzeug.security import generate_password_hash
+from flask import Flask, redirect, render_template, request, session, abort, flash, make_response, jsonify
 import db, users, config
 import markupsafe
 import posts
@@ -15,6 +13,10 @@ def show_lines(content):
     content = content.replace("\n", "<br />")
     return markupsafe.Markup(content)
 
+@app.template_filter()
+def filter_empty_days(content_days):
+    return [day for day in content_days if day.strip()]
+
 def require_login():
     if "user_id" not in session:
         abort(403)
@@ -23,9 +25,12 @@ def check_csrf():
     if request.form["csrf_token"] != session["csrf_token"]:
         abort(403)
 
-@app.route("/")
+@app.route('/')
 def index():
-    return render_template("index.html", csrf_token=session.get("csrf_token"))
+    offset = int(request.args.get('offset', 0))
+    limit = int(request.args.get('limit', 10))
+    paginated_posts = posts.fetch_posts(offset, limit)
+    return render_template('index.html', posts=paginated_posts, offset=offset, limit=limit)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -105,8 +110,8 @@ def new_post():
 def get_posts():
     offset = int(request.args.get('offset', 0))
     limit = int(request.args.get('limit', 10))
-    posts_data = posts.fetch_posts(offset, limit)
-    return jsonify(posts_data)
+    paginated_posts = posts.fetch_posts(offset, limit)
+    return jsonify(paginated_posts)
 
 @app.route("/image/<int:post_id>")
 def show_image(post_id):
