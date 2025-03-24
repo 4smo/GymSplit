@@ -90,7 +90,7 @@ def new_post():
         check_csrf()
         require_login()
         title = request.form["title"]
-        tag = request.form["class"]
+        tag = request.form["tag"]
         content_days = [request.form.get(f'content_day{i}', '') for i in range(1, 8)]
 
         if not title or len(title) > 100:

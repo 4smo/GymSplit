@@ -1,17 +1,19 @@
 CREATE TABLE posts (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT,
     tag TEXT,
     content_day1 TEXT,
     content_day2 TEXT,
     content_day3 TEXT,
     content_day4 TEXT,
+    content_day5 TEXT,
     content_day6 TEXT,
-    content_day7 TEXT
+    content_day7 TEXT,
+    user_id INTEGER
 );
 
 CREATE TABLE users (
-    id INTEGER PRIMARY KEY,
+    user_id INTEGER,
     username TEXT UNIQUE,
     password_hash TEXT
 );
