@@ -12,11 +12,20 @@
     <label for="title">Title</label>:<br />
     <input type="text" id="title" name="title" maxlength="100" required />
   </p>
+  <p>
+    <label for="tag">tag</label>:<br />
+    <select id="tag" name="tag" required>
+      <option value="PPL">PPL</option>
+      <option value="U/L">U/L</option>
+      <option value="FB">FB</option>
+      <option value="Other">Other</option>
+    </select>
+  </p>  
   <div id="content-boxes">
     <p>
       <label for="content_day1">Day 1</label>:<br />
       <textarea id="content_day1" name="content_day1" rows="5" cols="40" maxlength="50"></textarea>
-    </p>
+    </p>  
   </div>
   <button type="button" id="add-content-box">+</button>
   

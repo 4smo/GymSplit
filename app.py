@@ -90,14 +90,14 @@ def new_post():
         check_csrf()
         require_login()
         title = request.form["title"]
+        tag = request.form["class"]
         content_days = [request.form.get(f'content_day{i}', '') for i in range(1, 8)]
 
         if not title or len(title) > 100:
             abort(403)
-        
 
         user_id = session["user_id"]
-        post_id = posts.add_post(title, content_days, user_id)
+        post_id = posts.add_post(title, content_days, tag, user_id)
    
         return redirect("/")
     
