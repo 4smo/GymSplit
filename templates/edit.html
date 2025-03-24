@@ -12,6 +12,15 @@
       <label for="title">Title</label>:<br />
       <input type="text" id="title" name="title"  value="{{ filled.title }}" maxlength="100" required />
     </p>
+    <p>
+      <label for="tag">Tag</label>:<br />
+      <select id="tag" name="tag" required>
+        <option value="PPL" {% if filled.tag == "PPL" %}selected{% endif %}>PPL</option>
+        <option value="U/L" {% if filled.tag == "U/L" %}selected{% endif %}>U/L</option>
+        <option value="FB" {% if filled.tag == "FB" %}selected{% endif %}>FB</option>
+        <option value="Other" {% if filled.tag == "Other" %}selected{% endif %}>Other</option>
+      </select>
+    </p>
     <div id="content-boxes">
       {% for i in range(1, 8) %}
       <p>

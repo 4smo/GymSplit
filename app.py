@@ -138,6 +138,7 @@ def edit_post(post_id):
             abort(403)
         filled = {
             "title": post["title"],
+            "tag": post["tag"],
             "content_day1": post["content_day1"],
             "content_day2": post["content_day2"],
             "content_day3": post["content_day3"],
@@ -151,17 +152,16 @@ def edit_post(post_id):
     if request.method == "POST":
         require_login()
         check_csrf()
-
         post = posts.fetch_post(post_id)
         if not post or post["user_id"] != session["user_id"]:
             abort(403)
-
         title = request.form["title"]
+        tag = request.form["tag"]
         content_days = [request.form.get(f'content_day{i}', '') for i in range(1, 8)]
         if not title or len(title) > 100:
             abort(403)
         user_id = session["user_id"]
-        posts.update_post(title, content_days, user_id, post_id)
+        posts.update_post(title, tag, content_days, user_id, post_id)
         return redirect(f"/post/{post_id}")
 
 
