@@ -25,9 +25,32 @@
     <p>
       <label for="content_day1">Day 1</label>:<br />
       <textarea id="content_day1" name="content_day1" rows="5" cols="40" maxlength="50"></textarea>
-    </p>  
+    </p>
+    <p>
+      <label for="content_day2">Day 2</label>:<br />
+      <textarea id="content_day2" name="content_day2" rows="5" cols="40" maxlength="50"></textarea>
+    </p>
+    <p>
+      <label for="content_day3">Day 3</label>:<br />
+      <textarea id="content_day3" name="content_day3" rows="5" cols="40" maxlength="50"></textarea>
+    </p>
+    <p>
+      <label for="content_day4">Day 4</label>:<br />
+      <textarea id="content_day4" name="content_day4" rows="5" cols="40" maxlength="50"></textarea>
+    </p>
+    <p>
+      <label for="content_day5">Day 5</label>:<br />
+      <textarea id="content_day5" name="content_day5" rows="5" cols="40" maxlength="50"></textarea>
+    </p>
+    <p>
+      <label for="content_day6">Day 6</label>:<br />
+      <textarea id="content_day6" name="content_day6" rows="5" cols="40" maxlength="50"></textarea>
+    </p>
+    <p>
+      <label for="content_day7">Day 7</label>:<br />
+      <textarea id="content_day7" name="content_day7" rows="5" cols="40" maxlength="50"></textarea>
+    </p>
   </div>
-  <button type="button" id="add-content-box">+</button>
   
   {% for message in get_flashed_messages() %}
   <p class="info">
@@ -39,20 +62,6 @@
   <input type="submit" value="Lähetä" />
 </form>
 
-<script>
-  document.getElementById('add-content-box').addEventListener('click', function() {
-    var contentBoxes = document.getElementById('content-boxes');
-    var numBoxes = contentBoxes.getElementsByTagName('textarea').length;
-    
-    if (numBoxes < 7) {
-      var newBox = document.createElement('p');
-      newBox.innerHTML = '<label for="content_day' + (numBoxes + 1) + '">Day ' + (numBoxes + 1) + '</label>:<br />' +
-                         '<textarea id="content_day' + (numBoxes + 1) + '" name="content_day' + (numBoxes + 1) + '" rows="5" cols="40" maxlength="5000"></textarea>';
-      contentBoxes.appendChild(newBox);
-    }
-  });
-</script>
 {% endif %}
-
 
 {% endblock %}
