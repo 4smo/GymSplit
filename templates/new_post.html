@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 
-{% block title %}Keskustelu{% endblock %}
+{% block title %}Split{% endblock %}
 
 {% block content %}
 
 {% if session.user_id %}
-<h3>Uusi ketju</h3>
+<h3>New Split</h3>
 
 <form action="/new_post" method="post" enctype="multipart/form-data">
   <p>

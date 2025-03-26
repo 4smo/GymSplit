@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}Search{% endblock%}
+
+{% block content %}
+
+<h2>Search</h2>
+
+<form action="/search" method="get">
+    <p>
+      <label for="query">Tag</label>:<br />
+      <select id="query" name="query" required>
+        <option value="PPL" {% if query == "PPL" %}selected{% endif %}>PPL</option>
+        <option value="U/L" {% if query == "U/L" %}selected{% endif %}>U/L</option>
+        <option value="FB" {% if query == "FB" %}selected{% endif %}>FB</option>
+        <option value="Other" {% if query == "Other" %}selected{% endif %}>Other</option>
+      </select>
+    </p>
+    <input type="submit" value="Search" />
+  </form>
+
+{% if query %}
+<h3>Results</h3>
+
+<ul>
+{% for result in results %}
+    <div class="post">
+    <p>
+      <a href="/post/{{ result.id }}">{{ result.title }}</a>
+    </p>
+    <p>{{ result.tag }}</p>
+    <div>{{ result.content_days | filter_empty_days | join(' | ') }}</div>
+  </div> 
+{% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}

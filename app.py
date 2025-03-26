@@ -176,3 +176,12 @@ def show_post(post_id):
     if not post:
         abort(404)
     return render_template("post.html", post=post)
+
+
+@app.route("/search")
+def search():
+    query = request.args.get("query")
+    print(f"Search query: {query}")  # Debugging line
+    results = posts.search(query) if query else []
+    print(f"Search results: {results}")  # Debugging line
+    return render_template("search.html", query=query, results=results)

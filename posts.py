@@ -44,3 +44,18 @@ def update_post(title, tag, content_days, user_id, post_id):
     
     post_id = db.last_insert_id()
     return post_id
+
+def search(query):
+    sql = "SELECT id, title, tag, content_day1, content_day2, content_day3, content_day4, content_day5, content_day6, content_day7, user_id FROM posts WHERE tag = ?"
+    result = db.query(sql, [query])
+    posts_list = [
+        {
+            "id": row[0],
+            "title": row[1],
+            "tag": row[2],
+            "content_days": row[3:10],
+            "user_id": row[10]
+        }
+        for row in result
+    ]
+    return posts_list
