@@ -22,9 +22,8 @@
 {% if query %}
 <h3>Results</h3>
 
-<ul>
 {% for result in results %}
-    <div class="post">
+  <div class="post">
     <p>
       <a href="/post/{{ result.id }}">{{ result.title }}</a>
     </p>
@@ -32,7 +31,13 @@
     <div>{{ result.content_days | filter_empty_days | join(' | ') }}</div>
   </div> 
 {% endfor %}
-</ul>
+
+<div class="pagination" style="margin-top: 20px;">
+  {% if offset > 0 %}
+    <a href="?query={{ query }}&offset={{ offset - limit }}&limit={{ limit }}">Previous</a>
+  {% endif %}
+  <a href="?query={{ query }}&offset={{ offset + limit }}&limit={{ limit }}">Next</a>
+</div>
 {% endif %}
 
 {% endblock %}

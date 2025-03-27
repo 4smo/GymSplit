@@ -45,9 +45,9 @@ def update_post(title, tag, content_days, user_id, post_id):
     post_id = db.last_insert_id()
     return post_id
 
-def search(query):
-    sql = "SELECT id, title, tag, content_day1, content_day2, content_day3, content_day4, content_day5, content_day6, content_day7, user_id FROM posts WHERE tag = ?"
-    result = db.query(sql, [query])
+def search(query, offset=0, limit=10):
+    sql = "SELECT id, title, tag, content_day1, content_day2, content_day3, content_day4, content_day5, content_day6, content_day7, user_id FROM posts WHERE tag = ? LIMIT ? OFFSET ?"
+    result = db.query(sql, [query, limit, offset])
     posts_list = [
         {
             "id": row[0],

@@ -181,7 +181,7 @@ def show_post(post_id):
 @app.route("/search")
 def search():
     query = request.args.get("query")
-    print(f"Search query: {query}")  # Debugging line
-    results = posts.search(query) if query else []
-    print(f"Search results: {results}")  # Debugging line
-    return render_template("search.html", query=query, results=results)
+    offset = int(request.args.get("offset", 0))
+    limit = int(request.args.get("limit", 10))
+    results_paginated = posts.search(query, offset, limit) if query else []
+    return render_template("search.html", query=query, results=results_paginated, offset=offset, limit=limit)
