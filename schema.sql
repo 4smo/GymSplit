@@ -9,18 +9,18 @@ CREATE TABLE posts (
     content_day5 TEXT,
     content_day6 TEXT,
     content_day7 TEXT,
-    user_id INTEGER
+    user_id INTEGER REFERENCES users
 );
 
 CREATE TABLE users (
-    user_id INTEGER,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE,
     password_hash TEXT
 );
 
 CREATE TABLE votes (
     id INTEGER PRIMARY KEY,
-    user_id INTEGER,
+    user_id INTEGER REFERENCES users,
     post_id INTEGER,
     vote INTEGER
 );

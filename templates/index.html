@@ -22,7 +22,9 @@
   {% if offset > 0 %}
   <a href="?offset={{ offset - limit }}&limit={{ limit }}">Previous</a>
   {% endif %}
+  {% if posts | count == limit %}
   <a href="?offset={{ offset + limit }}&limit={{ limit }}">Next</a>
+  {% endif %}
 </div>
 
 {% endblock %}

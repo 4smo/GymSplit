@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}User {{ user.username }}{% endblock %}
+
+{% block content %}
+
+<h2>User {{ user.username }}</h2>
+
+<p>
+  User has published {{ total_posts }} splits.
+</p>
+
+{% if votes %}
+<p>
+  Upvotes received {{ votes }}
+</p>
+{% endif %}
+
+<h2>Published splits:</h2>
+
+{% for post in posts %}
+  <div class="post">
+    <p>
+      <a href="/post/{{ post.id }}">{{ post.title }}</a>
+    </p>
+    <p>{{ post.tag }}</p>
+    <div>{{ post.content_days | filter_empty_days | join(' | ') }}</div>
+  </div> 
+{% endfor %}
+
+<div class="pagination" style="margin-top: 20px;">
+  {% if offset > 0 %}
+    <a href="?query={{ query }}&offset={{ offset - limit }}&limit={{ limit }}">Previous</a>
+  {% endif %}
+  {% if posts | count == limit %}
+  <a href="?query={{ query }}&offset={{ offset + limit }}&limit={{ limit }}">Next</a>
+  {% endif %}
+</div>
+
+{% endblock %}

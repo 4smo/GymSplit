@@ -59,3 +59,24 @@ def search(query, offset=0, limit=10):
         for row in result
     ]
     return posts_list
+
+def user_posts(user_id, offset=0, limit=10):
+    sql = "SELECT id, title, tag, content_day1, content_day2, content_day3, content_day4, content_day5, content_day6, content_day7, user_id FROM posts WHERE user_id = ? LIMIT ? OFFSET ?"
+    result = db.query(sql, [user_id, limit, offset])
+    posts_list = [
+        {
+            "id": row[0],
+            "title": row[1],
+            "tag": row[2],
+            "content_days": row[3:10],
+            "user_id": row[10]
+        }
+        for row in result
+    ]
+    return posts_list
+
+
+def total_posts_count(user_id):
+    sql = "SELECT COUNT(*) FROM posts WHERE user_id = ?"
+    result = db.query(sql, [user_id])
+    return result[0][0]

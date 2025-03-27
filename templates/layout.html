@@ -26,6 +26,7 @@
         {% else %}
         <li><a href="/login">Log In</a></li>
         {% endif %}
+        <li><a href="/user/{{ session.user_id }}">Profile</a></li>
       </ul>
     </nav>
   </div>

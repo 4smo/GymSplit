@@ -185,3 +185,12 @@ def search():
     limit = int(request.args.get("limit", 10))
     results_paginated = posts.search(query, offset, limit) if query else []
     return render_template("search.html", query=query, results=results_paginated, offset=offset, limit=limit)
+
+@app.route("/user/<int:user_id>")
+def profile(user_id):
+    offset = int(request.args.get("offset", 0))
+    limit = int(request.args.get("limit", 10))
+    user_posts = posts.user_posts(user_id, offset, limit)
+    user = users.get_user(user_id)
+    total_posts = posts.total_posts_count(user_id)
+    return render_template("profile.html", posts=user_posts, user=user, offset=offset, limit=limit, total_posts=total_posts)
