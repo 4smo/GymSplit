@@ -3,6 +3,7 @@ import db, users, config
 import markupsafe
 import posts
 import math, secrets
+import sqlite3
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
