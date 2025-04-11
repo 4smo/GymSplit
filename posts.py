@@ -8,7 +8,7 @@ def add_post(title, content_days, tag, user_id):
     post_id = db.last_insert_id()
     return post_id
 
-def upvote(user_id, post_id, vote):
+def vote(user_id, post_id, vote):
     sql = "INSERT INTO votes (user_id, post_id, vote) VALUES (?, ?, ?)"
     db.execute(sql, [user_id, post_id, vote])
 
@@ -80,3 +80,18 @@ def total_posts_count(user_id):
     sql = "SELECT COUNT(*) FROM posts WHERE user_id = ?"
     result = db.query(sql, [user_id])
     return result[0][0]
+
+def get_user_vote(user_id, post_id):
+    sql = "SELECT vote FROM votes WHERE user_id = ? AND post_id = ?"
+    result = db.query(sql, [user_id, post_id])
+    if result:
+        return result[0]
+    else:
+        return None
+    
+def get_post_votes(post_id):
+    sql = "SELECT SUM(vote) as total_votes FROM votes WHERE post_id = ?"
+    result = db.query(sql, [post_id])
+    if result:
+        return result[0]['total_votes']
+    return 0

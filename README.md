@@ -15,4 +15,4 @@
 - Käyttäjä näkee omat ja muiden lisäämät treeniohjelmat.
 - Käyttäjä pystyy etsimään treeniohjelmia luokittelun perusteella.
 - Sovelluksessa on käyttäjäsivut, jotka näyttävät tilastoja ja käyttäjän lisäämät treeniohjelmat.
-- Käyttäjä pystyy valitsemaan treeniohjelmalle luokittelun (esim. U/L, FB, PPL)
+- Käyttäjä pystyy valitsemaan treeniohjelmalle luokittelun (esim. U/L, FB, PPL)R

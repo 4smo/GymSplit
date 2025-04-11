@@ -174,9 +174,12 @@ def edit_post(post_id):
 @app.route("/post/<int:post_id>")
 def show_post(post_id):
     post = posts.fetch_post(post_id)
+    user_id = session.get("user_id")
     if not post:
         abort(404)
-    return render_template("post.html", post=post)
+
+    total_votes = posts.get_post_votes(post_id)
+    return render_template("post.html", post=post, user_id=user_id, total_votes=total_votes)
 
 
 @app.route("/search")
@@ -195,3 +198,23 @@ def profile(user_id):
     user = users.get_user(user_id)
     total_posts = posts.total_posts_count(user_id)
     return render_template("profile.html", posts=user_posts, user=user, offset=offset, limit=limit, total_posts=total_posts)
+
+
+@app.route("/post/<int:post_id>/vote", methods=["POST"])
+def vote(post_id):
+    require_login()
+    check_csrf()
+
+    user_id = session.get("user_id")
+    vote = request.form.get("vote")
+
+    if user_id is None:
+        abort(400)
+
+    existing_vote = posts.get_user_vote(user_id, post_id)
+    if existing_vote is not None:
+        flash("You have already voted on this post.")
+        return redirect(f"/post/{post_id}")
+
+    posts.vote(user_id, post_id, vote)
+    return redirect(f"/post/{post_id}")  
