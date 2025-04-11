@@ -197,7 +197,10 @@ def profile(user_id):
     user_posts = posts.user_posts(user_id, offset, limit)
     user = users.get_user(user_id)
     total_posts = posts.total_posts_count(user_id)
-    return render_template("profile.html", posts=user_posts, user=user, offset=offset, limit=limit, total_posts=total_posts)
+    received_upvotes = posts.get_received_upvotes(user_id)
+    sent_votes = posts.get_sent_votes(user_id)
+    
+    return render_template("profile.html", posts=user_posts, user=user, offset=offset, limit=limit, total_posts=total_posts, received_upvotes=received_upvotes, sent_votes=sent_votes)
 
 
 @app.route("/post/<int:post_id>/vote", methods=["POST"])

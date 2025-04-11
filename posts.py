@@ -95,3 +95,22 @@ def get_post_votes(post_id):
     if result:
         return result[0]['total_votes']
     return 0
+
+def get_received_upvotes(user_id):
+    sql = """
+    SELECT SUM(vote) as received_upvotes 
+    FROM votes 
+    JOIN posts ON votes.post_id = posts.id 
+    WHERE posts.user_id = ? AND vote > 0
+    """
+    result = db.query(sql, [user_id])
+    if result:
+        return result[0]['received_upvotes']
+    return 0
+
+def get_sent_votes(user_id):
+    sql = "SELECT SUM(vote) as sent_votes FROM votes WHERE user_id = ?"
+    result = db.query(sql, [user_id])
+    if result:
+        return result[0]['sent_votes']
+    return 0

@@ -1,18 +1,20 @@
 {% extends "layout.html" %}
 
-{% block title %}User {{ user.username }}{% endblock %}
-
 {% block content %}
-
-<h2>User {{ user.username }}</h2>
 
 <p>
   User has published {{ total_posts }} splits.
 </p>
 
-{% if votes %}
+{% if received_upvotes %}
 <p>
-  Upvotes received {{ votes }}
+  Upvotes received: {{ received_upvotes }}
+</p>
+{% endif %}
+
+{% if sent_votes %}
+<p>
+  Sent votes: {{ sent_votes }}
 </p>
 {% endif %}
 
