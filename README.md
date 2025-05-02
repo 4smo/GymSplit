@@ -17,6 +17,7 @@ Seuraavat testit ovat toteutettu seed.py luomalla testidatalla, parametreillä:
 - `post_count = 10^5`
 - `vote_count = 10^6`
 
+```
 elapsed time: 0.001 s
 127.0.0.1 - - [02/May/2025 18:31:36] "GET /?offset=50&limit=10 HTTP/1.1" 200 -
 elapsed time: 0.001 s
@@ -25,6 +26,7 @@ elapsed time: 0.004 s
 127.0.0.1 - - [02/May/2025 18:32:17] "GET /post/55 HTTP/1.1" 200 -
 elapsed time: 0.0 s
 127.0.0.1 - - [02/May/2025 18:32:17] "GET /static/main.css HTTP/1.1" 200 -
+```
 
 ## Sovelluksen asennus
 
