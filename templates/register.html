@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}Keskustelu{% endblock %}
+{% block title %}Register{% endblock %}
 
 {% block content %}
 
@@ -17,7 +17,7 @@
 <body>
   <form action="/register" method="post">
     <p>
-      <label for="username">Tunnus:</label><br />
+      <label for="username">Username:</label><br />
       <input type="text" id="username" name="username" value="{{ filled.username }}" maxlength="16" required />
     </p>
     <p>

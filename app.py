@@ -1,9 +1,10 @@
-from flask import Flask, redirect, render_template, request, session, abort, flash, make_response, jsonify
+from flask import Flask, redirect, render_template, request, session, abort, flash, make_response, jsonify, g
 import db, users, config
 import markupsafe
 import posts
 import math, secrets
 import sqlite3
+import time
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -100,7 +101,13 @@ def new_post():
         content_days = [request.form.get(f'content_day{i}', '') for i in range(1, 8)]
 
         if not title or len(title) > 100:
-            abort(403)
+            flash("Title must be between 1 and 100 characters")
+            return render_template("new_post.html")
+
+        for i, content in enumerate(content_days, 1):
+            if len(content) > 50:
+                flash(f"Day {i} content must not exceed 50 characters")
+                return render_template("new_post.html")
 
         user_id = session["user_id"]
         post_id = posts.add_post(title, content_days, tag, user_id)
@@ -220,4 +227,14 @@ def vote(post_id):
         return redirect(f"/post/{post_id}")
 
     posts.vote(user_id, post_id, vote)
-    return redirect(f"/post/{post_id}")  
+    return redirect(f"/post/{post_id}")
+
+@app.before_request
+def before_request():
+    g.start_time = time.time()
+
+@app.after_request
+def after_request(response):
+    elapsed_time = round(time.time() - g.start_time, 5)
+    print("elapsed time:", elapsed_time, "s")
+    return response

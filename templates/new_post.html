@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}Split{% endblock %}
+{% block title %}New Split{% endblock %}
 
 {% block content %}
 
@@ -13,7 +13,7 @@
     <input type="text" id="title" name="title" maxlength="100" required />
   </p>
   <p>
-    <label for="tag">tag</label>:<br />
+    <label for="tag">Tag</label>:<br />
     <select id="tag" name="tag" required>
       <option value="PPL">PPL</option>
       <option value="U/L">U/L</option>
@@ -59,7 +59,7 @@
   {% endfor %}
   
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-  <input type="submit" value="Lähetä" />
+  <input type="submit" value="Submit" />
 </form>
 
 {% endif %}

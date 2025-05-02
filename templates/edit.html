@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 
-{% block title %}Keskustelu{% endblock %}
+{% block title %}Edit Split{% endblock %}
 
 {% block content %}
 
 {% if session.user_id %}
-<h3>Edit post</h3>
+<h3>Edit Split</h3>
 
 <form action="/post/{{ post_id }}/edit" method="post" enctype="multipart/form-data">
     <p>
@@ -38,7 +38,7 @@
     {% endfor %}
     
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" value="Lähetä" />
+    <input type="submit" value="Submit" />
   </form>
   
   <script>
@@ -55,6 +55,5 @@
     });
   </script>
 {% endif %}
-
 
 {% endblock %}
